@@ -1,0 +1,542 @@
+:root {
+    /* Color System */
+    --primary-color: #000000;     /* Dark background */
+    --secondary-color: #222222;   /* light accent */
+    --tertiary-color: #1DCD9F;    /* Light for interactive elements */
+    
+    /* Text colors */
+    --text-primary: #F8FAFC;      /* White for headings and important text */
+    --text-secondary: #D4C9BE;    /* Light gray for body text */
+    --text-accent: #384aee;       /* Light blue for links and highlights */
+    
+    /* Functional colors */
+    --bg-dark: var(--primary-color);
+    --bg-accent: var(--secondary-color);
+    --bg-light: #141313;          /* Slightly lighter background for cards */
+    
+    /* Page content width */
+    --content-max-width: 900px;   /* Reduced from 1200px for more concentrated content */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit; /* Ensure padding doesn't add to width */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    /* Removed flex properties from body to allow navbar to be full width */
+    max-width: 100vw; /* Restrict to viewport width */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--tertiary-color);
+    text-decoration: underline;
+}
+
+nav {
+    color: var(--text-primary);
+    padding: 0.75rem;
+    background-color: var(--bg-dark);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Ensure navbar is full width */
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* Removed max-width to allow navbar to be full width */
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.nav-p {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.nav-tags {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin: 0 auto; /* This centers the content container */
+    padding: 32px 16px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* Ensure text wraps instead of overflowing */
+    overflow-wrap: break-word;
+}
+
+.content > div {
+    width: 100%;
+    max-width: 100%; /* Ensure no child exceeds parent width */
+}
+
+.content p {
+    line-height: 1.5;
+    text-align: justify;
+    padding-left: 12px;
+    color: var(--text-secondary);
+}
+
+.table-content {
+    background-color: var(--bg-light);
+    border-radius: 8px;
+    padding: 16px;
+    color: var(--text-secondary);
+    border-left: 4px solid var(--secondary-color);
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-heading {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0; /* Remove bottom margin to align with button */
+}
+
+.toc-button {
+    background-color: var(--secondary-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toc-button:hover {
+    background-color: var(--tertiary-color);
+}
+
+#toc-list {
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+    max-height: 500px; /* Adjust depending on your content size */
+    opacity: 1;
+}
+
+#toc-list.hidden {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.table-content ul {
+    padding-left: 20px;
+}
+
+.table-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Image handling for responsiveness */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Table handling for responsiveness */
+table {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block; /* Makes tables scrollable when needed without breaking layout */
+}
+
+/* Add spacing between title and table of contents */
+.title {
+    margin-bottom: 2rem; /* Adds gap between title and table of contents */
+    text-align: center; /* Centers the title text */
+    width: 100%; /* Ensures the title takes full width of its container */
+}
+
+/* Fade-in animation styles */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Apply higher delay for sequential elements */
+.fade-delay-1 { transition-delay: 0.2s; }
+.fade-delay-2 { transition-delay: 0.4s; }
+.fade-delay-3 { transition-delay: 0.6s; }
+
+/* Video Container and Placeholder Styles */
+.video-container {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    aspect-ratio: 16/9;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.video-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #444;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    text-align: center;
+    z-index: -1; /* Place behind video by default */
+}
+
+/* Video loading state - will be applied by JS if video fails to load */
+.video-container.video-error .video-placeholder {
+    z-index: 1; /* Show placeholder above video if error */
+}
+
+/* Responsive video adjustments */
+@media (max-width: 768px) {
+    .video-container {
+        margin: 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-container {
+        margin: 10px 0;
+        
+    .video-placeholder p {
+        font-size: 1rem;
+    }
+}
+
+/* Video caption styling */
+.video-caption {
+    font-style: italic;
+    text-align: center;
+    margin: 0.5rem 0 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* Team Member Card Styles */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+    width: 100%;
+}
+
+.team-member {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.team-member:nth-child(1) { animation-delay: 0.1s; }
+.team-member:nth-child(2) { animation-delay: 0.2s; }
+.team-member:nth-child(3) { animation-delay: 0.3s; }
+.team-member:nth-child(4) { animation-delay: 0.4s; }
+.team-member:nth-child(5) { animation-delay: 0.5s; }
+
+.profile-card {
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.profile-img {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.profile-card:hover .profile-img img {
+    transform: scale(1.05);
+}
+
+.profile-card h3 {
+    color: var(--text-primary);
+    margin: 1rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+    text-align: center;
+}
+
+.profile-card .role {
+    color: var(--tertiary-color);
+    font-weight: bold;
+    margin: 0 1rem 0.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.profile-card .bio {
+    color: var(--text-secondary);
+    margin: 0 1rem 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    padding-left: 0;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0.5rem 0 1.5rem;
+    padding: 0 1rem;
+}
+
+.social-links a {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.social-links a:hover {
+    color: var(--tertiary-color);
+    transform: translateY(-3px);
+}
+
+/* Inspiration section layout */
+.inspiration-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.inspiration-image {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.inspiration-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.inspiration-text p {
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments for team cards and inspiration */
+@media (max-width: 992px) {
+    .team-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .inspiration-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .inspiration-image {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .profile-img {
+        height: 180px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .content {
+        padding: 16px 8px;
+    }
+    
+    .nav-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .table-heading {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    .content {
+        padding: 12px 6px;
+    }
+}
+/* Highlight styles for important text */
+.highlight {
+    text-decoration: underline;
+    text-decoration-color: var(--tertiary-color);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: inline;
+}
+
+/* Key point styling */
+.key-point {
+    margin: 1rem 0;
+    padding-left: 20px;
+    border-left: 3px solid var(--tertiary-color);
+    font-style: italic;
+}
+
+/* Methodology section styling */
+.methodology-section {
+    margin: 1rem 0 2rem;
+}
+
+.methodology-section p {
+    margin-bottom: 1rem;
+}
+
+#methodology h2 {
+    color: var(--tertiary-color);
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    border-bottom: 1px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Add space between list items */
+#introduction ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+#introduction ul li {
+    margin-bottom: 0.7rem;
+    color: var(--text-secondary);
+}

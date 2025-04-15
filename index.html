@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=10">
+    <title>ReLaxTron</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">
+                <p class="nav-p">ReLaxTron</p>
+            </div>
+            <div class="nav-links">
+                <a href="/about.html">About</a>
+                <a href="https://github.com/yourusername/relaxtron" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <div>
+            <h1 class="title">Smart Massage Robot</h1>
+            <div class="table-content">
+                <div class="toc-header">
+                    <p class="table-heading">Table of Content</p>
+                    <button id="toc-toggle" class="toc-button">Hide</button>
+                </div>
+                <ul id="toc-list">
+                    <li><a href="#abstract">Abstract</a></li>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#literature">Literature Review</a></li>
+                    <li><a href="#methodology">Methodology & Implementation</a></li>
+                    <li><a href="#results">Results and Discussion</a></li>
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="#conclusion">Conclusion and Future Work</a></li>
+                    <li><a href="#references">References</a></li>
+                </ul> 
+            </div>
+            <div id="abstract">
+                <h1>Abstract</h1>
+                <p>In this project, we designed a robotic system that performs hand massages using the UFactory Lite 6 robotic arm. Our goal was to create a reliable and customizable massage experience that reduces manual effort while delivering consistent results. The system employs a camera to detect the user's hand and precisely identify elbow and wrist positions. Since the robot and camera operate in different coordinate systems, we implemented a transformation algorithm to accurately map between them.</p>
+                
+                <p>Using the detected elbow and wrist points as anchors, our system generates a smooth massage path utilizing a B-spline algorithm. The robotic arm then follows this optimized trajectory, with the Z-axis pressure manually calibrated at each point to ensure user comfort. We developed two distinct massage styles: a smooth continuous motion and an alternating press-and-release pattern.</p>
+                
+                <p>For pressure optimization, we implemented a gradient descent algorithm that fine-tunes the applied force based on user feedback. This project successfully integrates robotics, computer vision, and intelligent motion planning to create a user-friendly hand massage solution with potential applications in healthcare and wellness domains.</p>
+            </div>
+            <div id="introduction">
+                <h1>Introduction</h1>
+                
+                <p>Hand fatigue, poor circulation, and discomfort are common issues faced by individuals due to repetitive tasks, computer use, or medical conditions. <span class="highlight">Traditional hand massage therapies</span>, while effective, are often time-consuming, expensive, and require human intervention. In response to the growing demand for personalized and accessible healthcare solutions, <span class="highlight">robotic massage systems have emerged as a promising alternative</span>.</p>
+
+                <div class="key-point">
+                    The integration of robotics and healthcare has opened new possibilities for consistent and accessible therapeutic solutions.
+                </div>
+            
+                <p>With advancements in <span class="highlight">robotics, computer vision, and artificial intelligence</span>, it is now possible to automate massage therapy by accurately identifying the contours of the human hand and delivering targeted relief. Our goal was to design and develop an intelligent hand massage robot that uses:</p>
+            
+                <ul>
+                    <li>A <span class="highlight">camera-based system</span> to detect the hand region</li>
+                    <li>Computer vision algorithms to identify <span class="highlight">key anatomical points</span> such as the elbow and wrist</li>
+                    <li>The <span class="highlight">UFactory Lite 6 robotic arm</span> to perform optimized massage movements</li>
+                </ul>
+            
+                <p>This project presents a robotic hand massage system using the <span class="highlight">uFactory Lite 6 robot</span>. The robot is equipped to perform automated massage based on camera input and user interaction. A fixed camera captures hand positions, and the robot performs smooth or pressing massages based on interpolated points along the hand.</p>
+            
+                <p>By implementing <span class="highlight">B-spline algorithms</span> and <span class="highlight">gradient-descent optimization</span> for smooth motion planning, the system ensures effective and comfortable massages tailored to individual users. This project demonstrates the potential of robotics in enhancing daily wellness and physical therapy for hand-related issues.</p>
+            
+                <div class="key-point">
+                    Our approach combines precision engineering with user-centric design to deliver a therapeutic experience that adapts to individual needs.
+                </div>
+            </div>
+            <div id="literature">
+                <h1>Literature Review</h1>
+                
+            </div>
+            <div id="methodology">
+                <h1>Methodology & Implementation</h1>
+                
+                <h2>Hardware Setup</h2>
+                <div class="methodology-section">
+    
+                    
+                    
+                    <p><span class="highlight">uFactory Lite 6 Robot Mounted on the Table</span>: The uFactory Lite 6 robot is a versatile robotic arm designed for precision tasks. It is securely mounted on a table to ensure stability during operation. The robot's base is fixed, allowing it to move freely within its workspace.</p>
+                    
+                    <p><span class="highlight">Camera Fixed on a Stand Beside the Table</span>: A high-resolution camera is positioned on a stand adjacent to the table. This camera is crucial for capturing images of the user's hand. The stand ensures that the camera has a clear and unobstructed view of the hand, which is essential for accurate detection and tracking.</p>
+                </div>
+                
+                <div class="key-point">
+                    The physical arrangement of hardware components plays a critical role in ensuring reliable system performance and accurate hand detection.
+                </div>
+                <div class="video-container">
+                    <video id="hardware-video" autoplay muted loop>
+                        <source src="/video/Hardware-Setup.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-placeholder">
+                        <p>Hardware setup video unavailable</p>
+                    </div>
+                </div>
+                <p class="video-caption">Hardware setup demonstration of the UFactory Lite 6 robotic arm and camera positioning.</p>
+                <h2>Coordinate System Calibration</h2>
+                <div class="methodology-section">
+                    <p><span class="highlight">Independent Coordinate Systems</span>: Both the camera and the robot operate within their own coordinate systems. The camera's coordinate system is based on its field of view and the pixels in the captured images. The robot's coordinate system is based on its physical workspace and the movements of its joints.</p>
+                    
+                    <p><span class="highlight">Transformation Matrix Computation</span>: To align the camera's coordinate system with the robot's coordinate system, a transformation matrix is computed. This matrix maps the coordinates from the camera's perspective to the robot's workspace. This calibration step ensures that the robot can accurately interpret the positions detected by the camera.</p>
+                </div>
+
+                <h2>Massage Region Detection</h2>
+                <div class="methodology-section">
+                    <p><span class="highlight">User's Hand Detection</span>: The system uses a specialized program to detect the user's hand within the camera's field of view. This program employs computer vision algorithms to identify and mark key anatomical points, specifically the elbow and wrist.</p>
+                    
+                    <p><span class="highlight">Coordinate Conversion</span>: The detected points (elbow and wrist) are initially in the camera's coordinate system. These points are then converted to the robot's coordinate system using the previously computed transformation matrix. This conversion is crucial for the robot to understand where to perform the massage.</p>
+                </div>
+                
+                <div class="key-point">
+                    Computer vision algorithms enable precise identification of anatomical landmarks, which are translated to the robot's coordinate space through mathematical transformations.
+                </div>
+
+                <h2>Point Generation using B-Spline</h2>
+                <div class="methodology-section">
+                    <p><span class="highlight">B-Spline Interpolation</span>: B-Spline interpolation is a mathematical technique used to generate smooth curves through a set of points. In this system, B-Spline interpolation is applied to generate 20 2D points between the elbow and wrist. These points are evenly distributed along the curve, ensuring a smooth path for the robot to follow.</p>
+                </div>
+
+                <h2>Z-Axis Manual Calibration</h2>
+                <div class="methodology-section">
+                    <p><span class="highlight">Robot Visits Each (x, y) Point</span>: The robot moves to each of the 20 2D points generated by the B-Spline interpolation. These points are in the x-y plane of the robot's coordinate system.</p>
+                    
+                    <p><span class="highlight">User Adjusts Z-Axis Manually</span>: At each (x, y) point, the user manually adjusts the z-axis (height) of the robot to achieve optimal pressure for the massage. This step ensures that the massage is comfortable and effective for the user.</p>
+                    
+                    <p><span class="highlight">Saving 3D Points</span>: The resulting 3D points (x, y, z) are saved in a CSV (Comma-Separated Values) file. This file serves as a record of the calibrated points, which will be used for subsequent massages.</p>
+                </div>
+
+                <h2>Interpolation to 40 Points</h2>
+                <div class="methodology-section">
+                    <p><span class="highlight">3D B-Spline Interpolation</span>: Using the 20 manually calibrated 3D points, the system applies B-Spline interpolation in 3D to generate an additional 20 points. This results in a total of 40 points, providing a more detailed and smooth path for the robot to follow.</p>
+                </div>
+                
+                <div class="key-point">
+                    The combination of manual calibration and algorithmic interpolation creates a massage path that is both precise and adaptable to individual user comfort preferences.
+                </div>
+
+                <h2>Massage Patterns</h2>
+                <div class="methodology-section">
+                    <p><span class="highlight">Smooth Pattern</span>: In the smooth pattern, the robot moves continuously through the 40 points. This creates a fluid and uninterrupted massage motion, which is gentle and soothing for the user.</p>
+                    
+                    <p><span class="highlight">Press Pattern</span>: In the press pattern, the robot moves to each of the 20 original points, presses down to apply pressure, and then lifts before moving to the next point. This pattern is designed to provide a deeper and more targeted massage, focusing on specific points along the hand.</p>
+                </div>
+            </div>
+            <div id="results">
+                <h1>Results and Discussion</h1>
+                <p>The results of the project were evaluated based on the performance of the robotic arm in delivering massages, user satisfaction, and the effectiveness of the camera-based detection system. The robot was able to accurately identify the hand region and deliver targeted massages with adjustable pressure levels. User feedback indicated a high level of satisfaction with the massage experience, highlighting the potential for further development and refinement of the system.</p>
+            </div>
+            <div id="demo">
+                <h1>Demo</h1>
+                <h3> Smooth Massage Simulation</h3>
+                <div class="video-container">
+                    <video id="demo-video" autoplay muted loop >
+                        <source src="/video/Smooth-Simulation.mp4" type="video/mp4">
+                        <!-- Add additional source formats if needed -->
+                        <!-- <source src="video/demo.webm" type="video/webm"> -->
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-placeholder">
+                        <p>Video demo unavailable</p>
+                    </div>
+                </div>
+                <p>Above is a simulation of the Hand Massage Robot. Platform : RoboDK</p>
+                <h3> Real time Smooth Massage </h3>
+                <div class="video-container">
+                    <video id="demo-video" autoplay muted loop>
+                        <source src="/video/Smooth-Massage.mp4" type="video/mp4">
+                        <!-- Add additional source formats if needed -->
+                        <!-- <source src="video/demo.webm" type="video/webm"> -->
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-placeholder">
+                        <p>Video demo unavailable</p>
+                    </div>
+                </div>
+                <p>Above is a demonstration of the Hand Massage Robot in action, showcasing its ability to detect hand positions and perform customized massage movements using the UFactory Lite 6 robotic arm.</p>
+                <h3> Pressing Massage Simulation</h3>
+                <div class="video-container">
+                    <video id="demo-video" autoplay muted loop>
+                        <source src="/video/Pressing-Simulation.mp4" type="video/mp4">
+                        <!-- Add additional source formats if needed -->
+                        <!-- <source src="video/demo.webm" type="video/webm"> -->
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-placeholder">
+                        <p>Video demo unavailable</p>
+                    </div>
+                </div>
+                <p>Above is also a simulation of the Hand Massage Robot. Platform : RoboDK</p>
+                <h3> Real time Pressing Massage </h3>
+                <div class="video-container">
+                    <video id="demo-video" autoplay muted loop>
+                        <source src="/video/Pressing-Massage.mp4" type="video/mp4">
+                        <!-- Add additional source formats if needed -->
+                        <!-- <source src="video/demo.webm" type="video/webm"> -->
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-placeholder">
+                        <p>Video demo unavailable</p>
+                    </div>
+                </div>
+                <p>Above is a demonstration of the Hand Massage Robot in action, showcasing its ability to detect hand positions and perform customized massage movements using the UFactory Lite 6 robotic arm</p>
+            </div>
+            <div id="conclusion">
+                <h1>Conclusion and Future Work</h1>
+                <p>The Hand Massage Robot successfully demonstrates the integration of robotics, computer vision, and intelligent control systems to provide personalized massage therapy. The project highlights the potential for further research and development in the field of assistive healthcare devices. Future work may include enhancing the robot's capabilities with additional sensors, improving the transformation algorithm between camera and robot coordinate systems, and expanding the range of massage patterns to address different therapeutic needs. This technology could be particularly valuable in healthcare settings, wellness centers, and for individuals seeking relief from repetitive strain injuries or conditions like arthritis.</p>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>
