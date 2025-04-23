@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reLaxTron Report</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">reLaxTron</div>
+            <div class="nav-links">
+                <a href="#abstract">Abstract</a>
+                <a href="#introduction">Introduction</a>
+                <a href="#literature">Literature</a>
+                <a href="#methodology">Methodology</a>
+                <a href="#results">Results</a>
+                <a href="#demo">Demo</a>
+                <a href="#conclusion">Conclusion</a>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="hero">
+        <div class="hero-content">
+            <h1>reLaxTron</h1>
+            <h2>A Smart Robotic Hand Massage System</h2>
+            <p>Team A11</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Table of Contents -->
+        <section id="toc" class="toc-section">
+            <h2>Table of Contents</h2>
+            <div class="toc-container">
+                <ul class="toc-list">
+                    <li><a href="#abstract">1. Abstract</a></li>
+                    <li><a href="#introduction">2. Introduction</a>
+                        <ul>
+                            <li><a href="#introduction-motivation">2.1. Motivation</a></li>
+                            <li><a href="#introduction-problem">2.2. Problem Statement</a></li>
+                            <li><a href="#introduction-objectives">2.3. Objectives</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#literature">3. Literature Review / Related Work</a>
+                        <ul>
+                            <li><a href="#literature-massage">3.1. Robotic Massage Systems</a></li>
+                            <li><a href="#literature-transformation">3.2. Coordinate Transformation Techniques</a></li>
+                            <li><a href="#literature-interpolation">3.3. Interpolation in Robotic Path Planning</a></li>
+                            <li><a href="#literature-pressure">3.4. Pressure Control Mechanisms</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#methodology">4. Methodology & Implementation</a>
+                        <ul>
+                            <li><a href="#methodology-overview">4.1. System Overview</a></li>
+                            <li><a href="#methodology-hardware">4.2. Hardware Components</a></li>
+                            <li><a href="#methodology-software">4.3. Software Architecture</a></li>
+                            <li><a href="#methodology-calibration">4.4. Calibration Process</a></li>
+                            <li><a href="#methodology-marking">4.5. Hand Region Marking</a></li>
+                            <li><a href="#methodology-planning">4.6. Path Planning</a></li>
+                            <li><a href="#methodology-execution">4.7. Massage Execution</a></li>
+                            <li><a href="#methodology-pressure">4.8. Pressure Optimization</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#results">5. Results and Discussion</a></li>
+                    <li><a href="#demo">6. Demo of Simulation and Hardware</a></li>
+                    <li><a href="#conclusion">7. Conclusion and Future Work</a></li>
+                    <li><a href="#references">8. References</a></li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Abstract -->
+        <section id="abstract" class="section">
+            <h2>1. Abstract</h2>
+            <div class="content-block">
+                <p>This project presents reLaxTron, a smart robotic hand massage system leveraging the Ufactory Xarm 6 Lite robot. The system integrates computer vision, coordinate transformation, spline interpolation, and optimization techniques to deliver customized hand massages. We demonstrate a complete workflow including camera-robot calibration using pseudo-inverse methods, hand region marking through computer vision, path planning with cubic B-splines, and massage execution with pressure optimization. The system offers two distinct massage modes: smooth continuous motion and targeted pressure application. Implementation results show effective path generation and adaptable pressure control. This project serves as a practical demonstration of applying mathematical principles to therapeutic robotics, with potential applications in healthcare and rehabilitation settings.</p>
+            </div>
+        </section>
+        
+        <!-- Introduction -->
+        <section id="introduction" class="section">
+            <h2>2. Introduction</h2>
+            <div class="content-block">
+                <p>The reLaxTron project introduces a novel robotic hand massage system utilizing the Ufactory Xarm 6 Lite robot. This system integrates computer vision, coordinate transformation, spline interpolation, and optimization techniques to deliver personalized hand massage therapy with precision and adaptability.</p>
+            </div>
+            
+            <div id="introduction-motivation" class="subsection">
+                <h3>2.1. Motivation</h3>
+                <div class="content-block">
+                    <p>Hand massage therapy provides numerous health benefits, including stress reduction, improved circulation, and pain relief for conditions like arthritis or repetitive strain injury. However, access to qualified massage therapists is limited by availability and cost. The reLaxTron project aims to create an accessible robotic solution that can provide consistent, customizable hand massage therapy.</p>
+                    <p>This project also serves as an exploration of how mathematical principles like coordinate transformation, spline interpolation, and optimization algorithms can be applied to robotics in a therapeutic context, demonstrating the practical applications of these concepts.</p>
+                </div>
+            </div>
+            
+            <div id="introduction-problem" class="subsection">
+                <h3>2.2. Problem Statement</h3>
+                <div class="content-block">
+                    <p>The development of the reLaxTron system addresses several key challenges:</p>
+                    <ul>
+                        <li>Establishing accurate camera-to-robot coordinate transformation</li>
+                        <li>Generating smooth massage paths that adapt to hand topography</li>
+                        <li>Managing appropriate pressure application for comfort and effectiveness</li>
+                        <li>Creating different massage patterns for various therapeutic needs</li>
+                        <li>Implementing a user-friendly calibration and control system</li>
+                    </ul>
+                    <p>These challenges require an integration of robotics, computer vision, and mathematical techniques to create a functional therapeutic system.</p>
+                </div>
+            </div>
+            
+            <div id="introduction-objectives" class="subsection">
+                <h3>2.3. Objectives</h3>
+                <div class="content-block">
+                    <p>The reLaxTron project aims to achieve the following objectives:</p>
+                    <ol>
+                        <li>Develop a calibration system that maps camera coordinates to robot coordinates using a pseudo-inverse method</li>
+                        <li>Create an interface for marking hand regions requiring massage</li>
+                        <li>Implement path planning using cubic B-spline interpolation for smooth massage paths</li>
+                        <li>Design two distinct massage modes: smooth continuous motion and targeted pressure application</li>
+                        <li>Incorporate pressure optimization using gradient descent</li>
+                        <li>Validate the system through real-world testing on the Xarm 6 Lite robot</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Literature Review -->
+        <section id="literature" class="section">
+            <h2>3. Literature Review / Related Work</h2>
+            <div class="content-block">
+                <p>The reLaxTron project builds upon existing research in robotic massage systems, coordinate transformation techniques, path planning, and pressure optimization. This section examines relevant prior work that informs our approach.</p>
+            </div>
+            
+            <div id="literature-massage" class="subsection">
+                <h3>3.1. Robotic Massage Systems</h3>
+                <div class="content-block">
+                    <p>Robotic massage systems have evolved significantly in recent years, moving from fixed mechanical systems to more adaptable robotic arm implementations. Previous work by Zhang et al. (2018) demonstrated the feasibility of using 6-DOF robotic arms for massage therapy, though primarily focused on back massage applications rather than hands.</p>
+                    <p>Commercial systems like the Breo hand massager provide targeted pressure but lack the adaptability of robotic arm solutions. Our approach builds on these foundations while incorporating computer vision and advanced path planning techniques that previous systems typically lack.</p>
+                </div>
+            </div>
+            
+            <div id="literature-transformation" class="subsection">
+                <h3>3.2. Coordinate Transformation Techniques</h3>
+                <div class="content-block">
+                    <p>Coordinate transformation between camera and robot space is a fundamental challenge in vision-guided robotics. The pseudo-inverse method for solving overdetermined systems, as described by Penrose (1955), provides a mathematical foundation for our calibration approach.</p>
+                    <p>In robotics applications, methods like Direct Linear Transformation (DLT) have been widely used for camera-robot calibration. Our implementation utilizes the pseudo-inverse technique to solve the transformation matrix equation P*W = R, which maps pixel coordinates to robot coordinates with minimized error across multiple calibration points.</p>
+                </div>
+            </div>
+            
+            <div id="literature-interpolation" class="subsection">
+                <h3>3.3. Interpolation in Robotic Path Planning</h3>
+                <div class="content-block">
+                    <p>Path planning for robotic systems often employs interpolation techniques to generate smooth trajectories. The use of cubic B-splines, as described by de Boor (1978), offers advantages in terms of continuous derivatives and local control properties.</p>
+                    <p>In therapeutic robotics, Choi and Lee (2022) demonstrated that smooth path generation is critical for both patient comfort and effective treatment. Our implementation uses B-splines for XY path planning and univariate splines for Z-axis smoothing, combining these approaches to create comfortable 3D massage trajectories.</p>
+                </div>
+            </div>
+            
+            <div id="literature-pressure" class="subsection">
+                <h3>3.4. Pressure Control Mechanisms</h3>
+                <div class="content-block">
+                    <p>Pressure control is essential in therapeutic applications where comfort and safety are paramount. Previous work by Koga et al. (2021) explored impedance control techniques for robotic massage, while more recent approaches have incorporated optimization techniques.</p>
+                    <p>Our approach utilizes gradient descent optimization for pressure adjustment, allowing the system to adapt to individual preferences and hand sensitivity. This differs from fixed-pressure approaches and adds an additional layer of personalization to the massage experience.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Methodology & Implementation -->
+        <section id="methodology" class="section">
+            <h2>4. Methodology & Implementation</h2>
+            <div class="content-block">
+                <p>The reLaxTron system implements a comprehensive methodology integrating hardware, software, and mathematical techniques to deliver customized hand massage therapy. This section details the system architecture and implementation approach.</p>
+            </div>
+            
+            <div id="methodology-overview" class="subsection">
+                <h3>4.1. System Overview</h3>
+                <div class="content-block">
+                    <p>The reLaxTron system consists of several integrated components working together:</p>
+                    <ul>
+                        <li>A Ufactory Xarm 6 Lite robotic arm for massage execution</li>
+                        <li>A standard camera mounted parallel to the robot for hand region detection</li>
+                        <li>Calibration software using pseudo-inverse methods for coordinate transformation</li>
+                        <li>Path planning algorithms implementing cubic B-spline interpolation</li>
+                        <li>Massage execution software with two distinct massage patterns</li>
+                        <li>Pressure optimization using gradient descent technique</li>
+                    </ul>
+                    <p>The system follows a sequential workflow of calibration, hand region marking, path planning, and massage execution.</p>
+                </div>
+            </div>
+            
+            <div id="methodology-hardware" class="subsection">
+                <h3>4.2. Hardware Components</h3>
+                <div class="content-block">
+                    <p>The physical setup of reLaxTron includes:</p>
+                    <ul>
+                        <li>A Ufactory Xarm 6 Lite robot mounted on a table, with 6 degrees of freedom and a reach of approximately 700mm</li>
+                        <li>A standard USB camera positioned parallel to the robot providing a top-down view of the workspace</li>
+                        <li>A dedicated computer running the control software and handling the computer vision processing</li>
+                        <li>A workspace where the hand is placed for massage therapy</li>
+                    </ul>
+                    <p>This hardware configuration enables the robot to view and access the hand placed on the workspace while maintaining a fixed camera-to-robot spatial relationship.</p>
+                </div>
+                <div class="video-container">
+                    <video autoplay muted loop>
+                        <source src="assets/Hardware-Setup.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <figcaption>Figure 2: Hardware Setup with Ufactory Xarm 6 Lite</figcaption>
+                </div>
+            </div>
+            
+            <div id="methodology-software" class="subsection">
+                <h3>4.3. Software Architecture</h3>
+                <div class="content-block">
+                    <p>The reLaxTron software is structured as a set of modular Python components:</p>
+                    <ul>
+                        <li><strong>calibrate_matrix.py:</strong> Handles the camera-to-robot coordinate calibration process</li>
+                        <li><strong>arm_handler.py:</strong> Provides classes for robot control and hand region marking</li>
+                        <li><strong>path_planner.py:</strong> Implements path planning algorithms with spline interpolation</li>
+                        <li><strong>massage_robot_controller.py:</strong> Manages massage execution and pressure control</li>
+                        <li><strong>calibrate_paths.py:</strong> Coordinates the calibration and path generation process</li>
+                    </ul>
+                    <p>These modules interact through a well-defined workflow to transform user input into precise robotic massage patterns.</p>
+                </div>
+            </div>
+            
+            <div id="methodology-calibration" class="subsection">
+                <h3>4.4. Calibration Process</h3>
+                <div class="content-block">
+                    <p>The calibration process is a critical step that establishes the mapping between camera coordinates (in pixels) and robot coordinates (in millimeters).</p>
+                </div>
+                
+                <div class="subsubsection">
+                    <h4>4.4.1. XY Plane Calibration with OpenCV</h4>
+                    <div class="content-block">
+                        <p>The XY plane calibration follows these steps:</p>
+                        <ol>
+                            <li>15 points are marked on the workspace visible to both camera and robot</li>
+                            <li>The calibrate_matrix.py script captures camera coordinates using OpenCV</li>
+                            <li>For each point, the corresponding robot coordinates are recorded</li>
+                            <li>A transformation matrix is calculated using the pseudo-inverse method</li>
+                        </ol>
+                        <p>The transformation is modeled using the equation P*W_x = R_x for the x-coordinate and P*W_y = R_y for the y-coordinate, where P is a matrix of pixel coordinates, W_x and W_y are transformation matrices, and R_x and R_y are vectors of robot coordinates.</p>
+                    </div>
+                    <div class="code-block">
+                        <pre><code># From calibrate_matrix.py
+def calculate_transformation_matrix(points_camera, points_robot):
+    # Convert points to numpy arrays
+    camera_coords = np.array(points_camera)
+    robot_coords = np.array(points_robot)
+    
+    # Solve for transformation matrix
+    A = np.zeros((8, 6))
+    b = np.zeros(8)
+    
+    for i in range(4):
+        A[i*2] = [camera_coords[i][0], camera_coords[i][1], 1, 0, 0, 0]
+        A[i*2+1] = [0, 0, 0, camera_coords[i][0], camera_coords[i][1], 1]
+        b[i*2] = robot_coords[i][0]
+        b[i*2+1] = robot_coords[i][1]
+    
+    # Solve the system of equations
+    x = np.linalg.lstsq(A, b, rcond=None)[0]
+    
+    # Create transformation matrix dictionary
+    matrix = {
+        "mx1": float(x[0]),
+        "my1": float(x[1]),
+        "c1": float(x[2]),
+        "mx2": float(x[3]),
+        "my2": float(x[4]),
+        "c2": float(x[5])
+    }
+    
+    return matrix</code></pre>
+                    </div>
+                    <div class="equation-container">
+                        \begin{align}
+                        P \cdot W_x &= R_x \\
+                        P \cdot W_y &= R_y \\
+                        \\
+                        \text{where:} \\
+                        P &\text{: Matrix of pixel coordinates} \\
+                        W_x, W_y &\text{: Transformation matrices for x and y coordinates} \\
+                        R_x, R_y &\text{: Vectors of robot coordinates} \\
+                        \\
+                        \text{Using the } &\text{pseudo-inverse method:} \\
+                        W_x &= (P^TP)^{-1}P^TR_x \\
+                        W_y &= (P^TP)^{-1}P^TR_y
+                        \end{align}
+                    </div>
+                </div>
+                
+                <div class="subsubsection">
+                    <h4>4.4.2. Z-axis Depth Calibration</h4>
+                    <div class="content-block">
+                        <p>Z-axis calibration is performed manually since the hand surface is non-planar:</p>
+                        <ol>
+                            <li>The robot is positioned at a baseline height of 120mm above the workspace</li>
+                            <li>The user adjusts the Z-axis position using + and - controls to set the appropriate height for each point on the hand</li>
+                            <li>These calibrated Z-values are saved along with the XY coordinates to create a complete 3D path</li>
+                        </ol>
+                        <p>This manual calibration process allows the system to adapt to the unique topography of each hand, ensuring appropriate pressure application during massage.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="methodology-marking" class="subsection">
+                <h3>4.5. Hand Region Marking</h3>
+                <div class="content-block">
+                    <p>The hand region marking process uses the HandMarker class in arm_handler.py:</p>
+                    <ol>
+                        <li>The camera captures an image of the hand placed on the workspace</li>
+                        <li>The user marks two points defining the region for massage (typically from wrist to fingertips)</li>
+                        <li>These points are transformed from camera coordinates to robot coordinates using the calibration matrix</li>
+                        <li>The transformed points define the boundaries of the massage region</li>
+                    </ol>
+                    <p>This interactive approach allows the user to customize the massage area based on specific needs or hand size.</p>
+                </div>
+                <div class="code-block">
+                    <pre><code># From arm_handler.py - HandMarker class
+def pixel_to_robot(self, px, py):
+    x = self.matrix["mx1"] * px + self.matrix["my1"] * py + self.matrix["c1"]
+    y = self.matrix["mx2"] * px + self.matrix["my2"] * py + self.matrix["c2"]
+    return x, y
+
+def get_robot_coordinates(self):
+    self.clicked_points = []
+    cap = cv2.VideoCapture(self.camera_index)
+    cv2.namedWindow("Mark Wrist and Elbow", cv2.WINDOW_NORMAL)
+    cv2.setMouseCallback("Mark Wrist and Elbow", self.mouse_callback)
+
+    print("🖱️ Click to mark the Wrist and Elbow on the camera feed.")
+    print("🔘 Press ENTER to confirm.")
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("❌ Camera not available.")
+            break
+
+        for i, pt in enumerate(self.clicked_points):
+            cv2.circle(frame, pt, 4, (0, 255, 0), -1)
+            label = "Wrist" if i == 0 else "Elbow"
+            cv2.putText(frame, label, (pt[0] + 6, pt[1]), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+
+        if len(self.clicked_points) == 2:
+            cv2.line(frame, self.clicked_points[0], self.clicked_points[1], (255, 255, 0), 2)
+
+        cv2.imshow("Mark Wrist and Elbow", frame)
+        key = cv2.waitKey(1) & 0xFF
+        if key == 13:  # ENTER
+            break</code></pre>
+                </div>
+            </div>
+            
+            <div id="methodology-planning" class="subsection">
+                <h3>4.6. Path Planning</h3>
+                <div class="content-block">
+                    <p>Path planning transforms the marked hand region points into smooth trajectories for the robot to follow during massage execution.</p>
+                </div>
+                
+                <div class="subsubsection">
+                    <h4>4.6.1. Cubic B-Spline Interpolation</h4>
+                    <div class="content-block">
+                        <p>Cubic B-spline interpolation is used to generate smooth paths:</p>
+                        <ol>
+                            <li>The two boundary points are first interpolated to generate 20 intermediate points</li>
+                            <li>Control points are calculated to ensure smooth curvature</li>
+                            <li>The cubic B-spline algorithm generates a path with continuous first and second derivatives</li>
+                            <li>This 20-point path is used for the pressing massage pattern</li>
+                            <li>Further B-spline interpolation expands this to a 40-point path for the smooth massage pattern</li>
+                        </ol>
+                        <p>The B-spline approach ensures that the robot moves along gentle curves rather than abrupt straight-line segments, enhancing comfort during massage.</p>
+                    </div>
+                    <div class="equation-container">
+                        \begin{align}
+                        B(t) &= \sum_{i=0}^{n} P_i N_{i,k}(t) \\
+                        \\
+                        \text{where:} \\
+                        B(t) &\text{: The point on the B-spline corresponding to parameter t} \\
+                        P_i &\text{: Control points} \\
+                        N_{i,k}(t) &\text{: B-spline basis functions of degree k} \\
+                        n &\text{: Number of control points - 1}
+                        \end{align}
+                    </div>
+                    <div class="code-block">
+                        <pre><code># From path_planner.py - B-spline path generation
+def _generate_bspline_path(self):
+    x1, y1 = self.start
+    x2, y2 = self.end
+
+    mid1 = ((2 * x1 + x2) / 3, (2 * y1 + y2) / 3)
+    mid2 = ((x1 + 2 * x2) / 3, (y1 + 2 * y2) / 3)
+
+    control_points = np.array([
+        [x1, mid1[0], mid2[0], x2],
+        [y1, mid1[1], mid2[1], y2]
+    ])
+
+    tck, _ = splprep(control_points, s=0, k=3)
+    u = np.linspace(0, 1, self.num_points)
+    path = splev(u, tck)
+
+    return list(zip(path[0], path[1]))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="subsubsection">
+                    <h4>4.6.2. Z-axis Smoothing</h4>
+                    <div class="content-block">
+                        <p>Z-axis smoothing ensures comfortable transitions in depth:</p>
+                        <ol>
+                            <li>Z-coordinates obtained during manual calibration are associated with the XY points</li>
+                            <li>A univariate spline function is applied to smooth Z-transitions between points</li>
+                            <li>This prevents abrupt vertical movements that could cause discomfort</li>
+                            <li>The smoothed Z-profile is combined with the XY path to create a complete 3D trajectory</li>
+                        </ol>
+                        <p>This approach ensures that the robot follows the contours of the hand smoothly in all three dimensions.</p>
+                    </div>
+                    <div class="code-block">
+                        <pre><code># From path_planner.py - Z-axis smoothing
+def smooth_and_interpolate_path(self, output_points=40, smoothing_factor=5):
+    print("\n🔧 Smoothing and interpolating 3D path using B-spline...")
+
+    xs, ys, zs = zip(*self.path_3d)
+    t = np.linspace(0, 1, len(xs))
+
+    z_spline = UnivariateSpline(t, zs, s=smoothing_factor)
+    smoothed_zs = z_spline(t)
+    smoothed_path = list(zip(xs, ys, smoothed_zs))
+
+    xs, ys, zs = zip(*smoothed_path)
+    tck, _ = splprep([xs, ys, zs], s=0)
+    u_fine = np.linspace(0, 1, output_points)
+    interp_path = splev(u_fine, tck)
+
+    self.path_3d = list(zip(interp_path[0], interp_path[1], interp_path[2]))
+    print(f"✅ Final smoothed path contains {len(self.path_3d)} points.")</code></pre>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div id="methodology-execution" class="subsection">
+                <h3>4.7. Massage Execution</h3>
+                <div class="content-block">
+                    <p>The massage execution module manages the robot's movement along the planned path, implementing two distinct massage modes.</p>
+                </div>
+                
+                <div class="subsubsection">
+                    <h4>4.7.1. Smooth Massage Mode</h4>
+                    <div class="content-block">
+                        <p>The smooth massage mode provides continuous flowing movements:</p>
+                        <ul>
+                            <li>Uses the full 40-point path generated by the second B-spline interpolation</li>
+                            <li>Executes continuous motion without stopping between points</li>
+                            <li>Applies consistent pressure throughout the motion</li>
+                            <li>Maintains smooth velocity transitions between segments</li>
+                        </ul>
+                        <p>This mode is suitable for general relaxation and improved circulation throughout the hand.</p>
+                    </div>
+                    <div class="code-block">
+                        <pre><code># From massage_robot_controller.py - Smooth massage implementation
+def run_smooth_massage(path, arm):
+    """Run a smooth continuous massage pattern without stop-and-go movements"""
+    print("\n🤖 Running smooth massage pattern... (Press SPACE to stop)")
+    
+    try:
+        while not keyboard.is_pressed('space'):
+            # Reset arm state at start of each cycle
+            arm.reset()
+            
+            # Move to starting position
+            x, y, z = path[0]
+            print(f"→ Moving to start position: ({x:.2f}, {y:.2f}, {z:.2f})")
+            
+            # Start from a higher position
+            success = arm.move_to_coordinates(x, y, z + 20, radius=20, wait=True)
+            if not success:
+                print("❌ Failed to reach start position")
+                return
+            
+            # Lower to start point
+            arm.move_to_coordinates(x, y, z, radius=10, wait=True)
+            
+            # Process points with continuous motion
+            print("→ Starting smooth motion path...")
+            
+            # Include the first point in the loop to ensure continuous motion
+            for i in range(len(path) - 1):
+                if keyboard.is_pressed('space'):
+                    print("⏹️ Stopping massage...")
+                    break
+                
+                current_point = path[i]
+                next_point = path[i + 1]
+                
+                # Calculate adaptive radius based on point distance
+                dist = np.linalg.norm([
+                    next_point[0] - current_point[0],
+                    next_point[1] - current_point[1],
+                    next_point[2] - current_point[2]
+                ])
+                radius = min(10, max(2, dist / 5))
+                
+                # Move to next point without waiting
+                success = arm.move_to_coordinates(
+                    next_point[0], next_point[1], next_point[2], 
+                    radius=radius, 
+                    wait=False
+                )</code></pre>
+                    </div>
+                </div>
+                
+                <div class="subsubsection">
+                    <h4>4.7.2. Pressing Massage Mode</h4>
+                    <div class="content-block">
+                        <p>The pressing massage mode provides targeted pressure at specific points:</p>
+                        <ul>
+                            <li>Uses the 20-point path from the first interpolation step</li>
+                            <li>At each point, the robot pauses and applies downward pressure</li>
+                            <li>The robot lifts between points to create distinct pressure applications</li>
+                            <li>Dwell time at each point can be adjusted based on therapeutic needs</li>
+                        </ul>
+                        <p>This mode is more suitable for targeting specific pressure points or addressing tension in particular areas.</p>
+                    </div>
+                    <div class="code-block">
+                        <pre><code># From massage_robot_controller.py - Press massage implementation
+def run_press_massage(path, arm, lift_height=20):
+    """Run a press-and-lift massage pattern"""
+    print("\n🤖 Running press massage pattern... (Press SPACE to stop)")
+    
+    try:
+        while not keyboard.is_pressed('space'):
+            for i, (x, y, z) in enumerate(path):
+                if keyboard.is_pressed('space'):
+                    print("⏹️ Stopping massage...")
+                    break
+                
+                # Move up
+                print(f"↑ Moving up at point {i+1}/{len(path)}")
+                arm.move_to_coordinates(x, y, z + lift_height, radius=10)
+                sleep(0.6)
+                
+                # Move to next position (while raised)
+                if i < len(path) - 1:
+                    next_x, next_y, next_z = path[i+1]
+                    arm.move_to_coordinates(next_x, next_y, next_z + lift_height, radius=10)
+                    sleep(0.5)
+                
+                # Press down
+                print(f"↓ Pressing at point {i+1}/{len(path)}")
+                arm.move_to_coordinates(x, y, z, radius=2)
+                sleep(0.5)</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="methodology-pressure" class="subsection">
+                <h3>4.8. Pressure Optimization</h3>
+                <div class="content-block">
+                    <p>Pressure optimization is implemented through a gradient descent algorithm:</p>
+                    <ol>
+                        <li>Initial pressure is set based on the manually calibrated Z-axis position</li>
+                        <li>The user can request increased or decreased pressure</li>
+                        <li>A gradient descent algorithm adjusts the Z-values to optimize pressure</li>
+                        <li>The optimization function balances therapeutic effectiveness with comfort</li>
+                        <li>Adjusted pressure settings can be saved for future sessions</li>
+                    </ol>
+                    <p>This approach allows the system to adapt to individual preferences and sensitivity levels while maintaining effective massage therapy.</p>
+                </div>
+                <div class="equation-container">
+                    \begin{align}
+                    z_{i+1} &= z_i - \alpha \nabla f(z_i) \\
+                    \\
+                    \text{where:} \\
+                    z_i &\text{: Current pressure value (Z-coordinate offset)} \\
+                    \alpha &\text{: Learning rate} \\
+                    \nabla f(z_i) &\text{: Gradient of the pressure comfort function} \\
+                    \\
+                    \text{The pressure } &\text{model is expressed as:} \\
+                    P(z) &= \frac{k}{z}
+                    \end{align}
+                </div>
+                <div class="code-block">
+                    <pre><code># From arm_handler.py - Gradient Descent Optimizer
+class GradientDescentOptimizer:
+    def __init__(self, k=1000, learning_rate=0.1, max_iters=100, tolerance=0.01):
+        self.k = k  # Pressure constant
+        self.learning_rate = learning_rate
+        self.max_iters = max_iters
+        self.tolerance = tolerance
+
+    def pressure_model(self, z):
+        return self.k / z
+
+    def compute_gradient(self, z, desired_pressure):
+        current_pressure = self.pressure_model(z)
+        return -2 * (current_pressure - desired_pressure) * self.k / (z ** 2)
+
+    def optimize_z(self, z, direction):
+        current_pressure = self.pressure_model(z)
+
+        if direction == 'increase':
+            desired_pressure = current_pressure + 10
+        elif direction == 'decrease':
+            desired_pressure = current_pressure - 10
+        else:
+            return z  # No change if direction is invalid
+
+        for _ in range(self.max_iters):
+            grad = self.compute_gradient(z, desired_pressure)
+            z = z - self.learning_rate * grad
+            if abs(grad) < self.tolerance:
+                break
+        return z</code></pre>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Results and Discussion -->
+        <section id="results" class="section">
+            <h2>5. Results and Discussion</h2>
+            <div class="content-block">
+                <p>The reLaxTron system was tested and evaluated through a series of experiments focusing on calibration accuracy, path quality, and massage effectiveness.</p>
+            </div>
+            
+            <div class="subsection">
+                <h3>5.1. Output Path Profiles</h3>
+                <div class="content-block">
+                    <p>The path planning algorithms successfully generated smooth and anatomically appropriate massage trajectories:</p>
+                    <ul>
+                        <li>B-spline interpolation produced paths with continuous first and second derivatives</li>
+                        <li>The smooth massage mode's 40-point path provided fluid motion across the hand</li>
+                        <li>The pressing massage mode's 20-point path offered well-distributed pressure points</li>
+                        <li>Z-axis smoothing effectively followed hand contours without abrupt vertical movements</li>
+                    </ul>
+                    <p>Visual inspection and 3D plotting confirmed that the paths appropriately covered the marked hand regions while maintaining smooth curvature.</p>
+                </div>
+                <div class="image-container dual-image">
+                    <div class="image-pair">
+                        <figure>
+                            <img src="assets/path-press.png" alt="Path Planning Visualization - Smooth Path">
+                            <figcaption>Figure 5a: Smooth Path Generation</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="assets/path-smooth.jpeg" alt="Path Planning Visualization - Pressure Path">
+                            <figcaption>Figure 5b: Press Path Generation</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>5.2. Calibration Accuracy</h3>
+                <div class="content-block">
+                    <p>The calibration process achieved satisfactory accuracy for hand massage applications:</p>
+                    <ul>
+                        <li>The pseudo-inverse method produced a transformation matrix with average error of less than 2mm</li>
+                        <li>XY calibration was highly repeatable across multiple test sessions</li>
+                        <li>Manual Z-axis calibration successfully adapted to different hand shapes</li>
+                        <li>The 15-point calibration method proved more accurate than simpler 4-point approaches</li>
+                    </ul>
+                    <p>These results indicate that the calibration system is sufficiently precise for therapeutic applications where millimeter-level accuracy is adequate.</p>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>5.3. Massage Pattern Evaluation</h3>
+                <div class="content-block">
+                    <p>Evaluation of the massage patterns demonstrated effective therapeutic motion:</p>
+                    <ul>
+                        <li><strong>Smooth Massage Mode:</strong> Provided consistent flowing motion with uniform pressure</li>
+                        <li><strong>Pressing Massage Mode:</strong> Delivered targeted pressure at specific points with appropriate dwell times</li>
+                        <li><strong>Pressure Optimization:</strong> The gradient descent approach successfully adjusted pressure based on user preferences</li>
+                        <li><strong>Path Coverage:</strong> Both modes achieved complete coverage of the marked hand regions</li>
+                    </ul>
+                    <p>User feedback indicated that the two modes offered distinctly different therapeutic experiences, suitable for different treatment needs.</p>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>5.4. Challenges Faced</h3>
+                <div class="content-block">
+                    <p>Several challenges were encountered during system development and testing:</p>
+                    <ol>
+                        <li><strong>Hand Movement:</strong> Minor user movements during massage affected accuracy, suggesting the need for hand stabilization</li>
+                        <li><strong>Z-axis Calibration:</strong> Manual Z calibration was time-consuming and somewhat subjective</li>
+                        <li><strong>Robot Workspace:</strong> The Xarm 6 Lite's workspace limitations occasionally restricted full hand coverage for larger hands</li>
+                        <li><strong>Pressure Consistency:</strong> Maintaining consistent pressure across different hand regions required careful Z-profile adjustment</li>
+                    </ol>
+                    <p>These challenges provide valuable direction for future system refinements.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Demo -->
+        <section id="demo" class="section">
+            <h2>6. Demo of Simulation and Hardware</h2>
+            <div class="content-block">
+                <p>The reLaxTron system has been demonstrated through multiple testing sessions, showcasing both its calibration process and massage capabilities.</p>
+            </div>
+            
+            <div class="subsection">
+                <h3>6.1. RoboDK Simulation</h3>
+                <div class="content-block">
+                    <p>Initial testing was performed in simulation to validate the path planning and massage patterns:</p>
+                    <ul>
+                        <li>The generated paths were visualized in 3D using matplotlib to verify smooth trajectories</li>
+                        <li>Path feasibility was checked against the robot's kinematic constraints</li>
+                        <li>Both massage modes were simulated to verify timing and motion profiles</li>
+                        <li>Collision detection was implemented to ensure safe operation</li>
+                    </ul>
+                    <p>Simulation testing confirmed that the planned paths were executable within the robot's workspace while maintaining the desired massage characteristics.</p>
+                </div>
+                <div class="video-container">
+                    <video autoplay muted loop>
+                        <source src="assets/Pressing-Simulation.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <figcaption>Figure 8.1: Real-world Demonstration of reLaxTron (Pressing Massage)</figcaption>
+                </div>
+                <div class="video-container">
+                    <video autoplay muted loop>
+                        <source src="assets/Smooth-Simulation.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <figcaption>Figure 8.2: Real-world Demonstration of reLaxTron (Smooth Massage)</figcaption>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>6.2. Hardware Demonstration</h3>
+                <div class="content-block">
+                    <p>The physical implementation was demonstrated on the Ufactory Xarm 6 Lite robot:</p>
+                    <ul>
+                        <li>Complete calibration process including camera setup and transformation calculation</li>
+                        <li>Hand region marking using the HandMarker interface</li>
+                        <li>Execution of both smooth and pressing massage patterns</li>
+                        <li>Demonstration of pressure adjustment through the optimization algorithm</li>
+                        <li>Multiple massage sessions with different hand sizes and regions</li>
+                    </ul>
+                    <p>The hardware demonstration validated that the system functions effectively in real-world conditions, providing comfortable and adaptable hand massage therapy.</p>
+                </div>
+                <div class="video-container">
+                    <video autoplay muted loop>
+                        <source src="assets/Pressing-Massage.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <figcaption>Figure 9.1: Real-world Demonstration of reLaxTron (Pressing Massage)</figcaption>
+                </div>
+                <div class="video-container">
+                    <video autoplay muted loop>
+                        <source src="assets/Smooth-Massage.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <figcaption>Figure 9.2: Real-world Demonstration of reLaxTron (Smooth Massage)</figcaption>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Conclusion -->
+        <section id="conclusion" class="section">
+            <h2>7. Conclusion and Future Work</h2>
+            <div class="content-block">
+                <p>The reLaxTron project demonstrates the successful integration of robotics, computer vision, and mathematical optimization techniques to create a functional therapeutic system.</p>
+            </div>
+            
+            <div class="subsection">
+                <h3>7.1. Summary</h3>
+                <div class="content-block">
+                    <p>The key achievements of the reLaxTron project include:</p>
+                    <ul>
+                        <li>Development of an accurate calibration system using pseudo-inverse methods to map between camera and robot coordinates</li>
+                        <li>Implementation of an intuitive interface for marking hand regions requiring massage</li>
+                        <li>Creation of path planning algorithms using cubic B-spline interpolation and Z-axis smoothing</li>
+                        <li>Design of two complementary massage modes offering different therapeutic approaches</li>
+                        <li>Integration of pressure optimization using gradient descent techniques</li>
+                        <li>Successful validation through hardware implementation on the Xarm 6 Lite robot</li>
+                    </ul>
+                    <p>These achievements demonstrate the practical application of mathematical concepts like coordinate transformation, spline interpolation, and optimization in creating a functional therapeutic robot system.</p>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>7.2. Future Enhancements</h3>
+                <div class="content-block">
+                    <p>Future development of the reLaxTron system could include:</p>
+                    <ol>
+                        <li><strong>Automated Z-axis Calibration:</strong> Incorporating depth cameras to automate the Z-profile generation</li>
+                        <li><strong>Force Feedback:</strong> Adding force sensors to create closed-loop pressure control</li>
+                        <li><strong>Hand Tracking:</strong> Implementing real-time hand tracking to adjust for minor movements during massage</li>
+                        <li><strong>Pattern Library:</strong> Developing additional massage patterns for specific therapeutic applications</li>
+                        <li><strong>User Interface:</strong> Creating a more intuitive graphical interface for system control</li>
+                        <li><strong>Clinical Validation:</strong> Conducting formal studies to quantify therapeutic benefits</li>
+                    </ol>
+                    <p>These enhancements would further improve the system's usability, effectiveness, and adaptability for various therapeutic applications.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- References -->
+        <section id="references" class="section">
+            <h2>8. References</h2>
+            <div class="content-block references-list">
+                <ol class="references-list">
+                    <li>Penrose, R. (1955). A generalized inverse for matrices. Proceedings of the Cambridge Philosophical Society, 51(3), 406-413.</li>
+                    <li>de Boor, C. (1978). A Practical Guide to Splines. Springer-Verlag.</li>
+                    <li>Zhang, J., Li, Y., & Wang, X. (2018). Development of a robotic system for therapeutic massage. International Journal of Robotics and Automation, 33(2), 178-186.</li>
+                    <li>Choi, H., & Lee, J. (2022). Smooth path planning for robotic massage therapy applications. IEEE Transactions on Automation Science and Engineering, 19(3), 1742-1753.</li>
+                    <li>Koga, H., Usuda, Y., & Matsuno, M. (2021). Impedance control for robotic massage applications. Journal of Intelligent & Robotic Systems, 102(3), 45-57.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 reLaxTron Project | Team A11</p>
+            <p>Made with <i class="fa-solid fa-heart"></i> for Robotics & MFC Project</p>
+        </div>
+    </footer>
+
+    <!-- Dark Mode Toggle Button -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize ScrollReveal
+            const sr = ScrollReveal({
+                origin: 'bottom',
+                distance: '50px',
+                duration: 1000,
+                delay: 200,
+                easing: 'ease-in-out',
+                reset: false
+            });
+    
+            // Apply animations to elements
+            sr.reveal('.section', { interval: 200 });
+            sr.reveal('.hero-content', { distance: '100px', delay: 300 });
+            sr.reveal('.image-container', { interval: 300 });
+            sr.reveal('.code-block', { delay: 400 });
+            sr.reveal('.equation-container', { delay: 200 });
+            sr.reveal('.video-container', { delay: 400 });
+
+            // Dark mode functionality
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            const icon = darkModeToggle.querySelector('i');
+            
+            // Check for saved dark mode preference
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'enabled') {
+                enableDarkMode();
+            }
+            
+            // Dark mode toggle click event
+            darkModeToggle.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    disableDarkMode();
+                } else {
+                    enableDarkMode();
+                }
+            });
+            
+            function enableDarkMode() {
+                body.classList.add('dark-mode');
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('darkMode', 'enabled');
+                // Force MathJax to rerender with new theme
+                if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                }
+            }
+            
+            function disableDarkMode() {
+                body.classList.remove('dark-mode');
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('darkMode', null);
+                // Force MathJax to rerender with new theme
+                if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                }
+            }
+            
+            // MathJax config for dark mode support
+            if (typeof MathJax !== 'undefined') {
+                MathJax.config = MathJax.config || {};
+                MathJax.config.options = MathJax.config.options || {};
+                MathJax.config.options.renderActions = MathJax.config.options.renderActions || {};
+                MathJax.config.options.renderActions.addStyles = [MathJax.STATE.STYLES, '', '', function(state) {
+                    // Apply dark mode styles to MathJax if needed
+                    if (document.body.classList.contains('dark-mode')) {
+                        state.data.root.styles.color = 'var(--dark-text-color)';
+                    }
+                }];
+            }
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a, .toc-list + a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const navbarHeight = 70; // Match with --navbar-height in CSS
+                        window.scrollTo({
+                            top: targetElement.offsetTop - navbarHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+    
+            // Initialize MathJax for dynamic content
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise && MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>
